@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FutureMe — AI Reflection Platform</title>
+  <link rel="stylesheet" href="styles.css">
+  <!-- PostHog Client Analytics (Optional fallback in app.js) -->
+</head>
+<body>
+  <!-- Apple style gradient background orbs -->
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="container nav-inner">
+      <div class="logo" id="navLogo">FutureMe</div>
+      <div class="nav-links" id="navLinks">
+        <!-- Landing page anchors -->
+        <a href="#how" class="landing-nav">How it works</a>
+        <a href="#create" class="landing-nav">Create</a>
+        <a href="#chat" class="landing-nav">Chat</a>
+        <a href="#hack" class="landing-nav">AI Hack</a>
+        
+        <!-- App views (authenticated) -->
+        <a id="navDashboard" class="app-nav" style="display: none;">Dashboard</a>
+        <a id="navLetters" class="app-nav" style="display: none;">Weekly Letters</a>
+        <a id="navBilling" class="app-nav" style="display: none;">Upgrade</a>
+        <a id="navAdmin" class="app-nav" style="display: none;">Admin</a>
+      </div>
+      <div id="navAuthActions">
+        <button class="btn btn-secondary" id="navLoginBtn">Login</button>
+        <a href="#create" id="navStartBtn"><button class="btn btn-primary">Start Now</button></a>
+        <button class="btn btn-secondary" id="navLogoutBtn" style="display: none;">Logout</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ==================== VIEW 1: LANDING PAGE (DEFAULT) ==================== -->
+  <div id="landingView" class="view-panel active-view">
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="badges">
+            <span class="pill">Built in Vaishnavi</span>
+            <span class="pill">AI Reflection</span>
+            <span class="pill">Personal Growth</span>
+            <span class="pill">Live Build</span>
+          </div>
+          <h1>Meet the version of you who already made it.</h1>
+          <p>
+            FutureMe helps you reflect, plan, and receive advice from the person you are becoming.
+          </p>
+          <div class="hero-actions">
+            <a href="#create"><button class="btn btn-primary">Create My FutureMe</button></a>
+            <a href="#how"><button class="btn btn-secondary">See How It Works</button></a>
+          </div>
+        </div>
+        <div class="preview-card glass reveal">
+          <div class="preview-title">Message from Future You</div>
+          <div class="preview-message" id="previewMsgText">
+            “You are closer than you think. But your current habits need to match your future identity.”
+          </div>
+          <div class="status" id="previewMsgStatus">
+            FutureMe generated • 4 seconds ago
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how">
+      <div class="container">
+        <div class="section-title reveal">
+          <h2>Your future is already leaving clues.</h2>
+          <p>Reflect honestly. Build intentionally. Move with clarity.</p>
+        </div>
+        <div class="cards">
+          <div class="card glass reveal">
+            <h3>Your goals</h3>
+            <p>Tell FutureMe what you want to become.</p>
+          </div>
+          <div class="card glass reveal">
+            <h3>Your fears</h3>
+            <p>Be honest about what is stopping you.</p>
+          </div>
+          <div class="card glass reveal">
+            <h3>Your next move</h3>
+            <p>Get a clear message from your future self.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Creation Section -->
+    <section id="create">
+      <div class="container">
+        <div class="section-title reveal">
+          <h2>Create Your Future Identity</h2>
+          <p>A premium AI reflection experience designed to turn uncertainty into action.</p>
+        </div>
+        <div class="app-shell reveal">
+          <div class="app-card">
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="name">Your name</label>
+                <input id="name" type="text" placeholder="Alex" required>
+              </div>
+              <div class="form-group">
+                <label for="age">Your current age</label>
+                <input id="age" type="number" placeholder="24" required>
+              </div>
+              <div class="form-group full">
+                <label for="goal">Your dream / goal</label>
+                <input id="goal" type="text" placeholder="Launch a profitable web startup" required>
+              </div>
+              <div class="form-group full">
+                <label for="struggle">What are you struggling with right now?</label>
+                <textarea id="struggle" placeholder="Procrastination, overthinking, lack of structure" required></textarea>
+              </div>
+              <div class="form-group full">
+                <label for="future">Where do you want to be in 1 year?</label>
+                <textarea id="future" placeholder="Living in New York, working full-time on my startup, physically fit" required></textarea>
+              </div>
+              <div class="form-group full">
+                <label for="tone">Choose your FutureMe tone</label>
+                <select id="tone">
+                  <option value="Motivational">Motivational</option>
+                  <option value="Brutally Honest">Brutally Honest</option>
+                  <option value="Calm Mentor">Calm Mentor</option>
+                  <option value="CEO Mode">CEO Mode</option>
+                </select>
+              </div>
+            </div>
+            <div style="margin-top: 25px;">
+              <button class="btn btn-primary" id="generateBtn">
+                Generate My FutureMe
+              </button>
+            </div>
+            <div id="error" class="error"></div>
+            
+            <!-- Loading indicator -->
+            <div id="loading" class="loading">
+              <div class="spinner"></div>
+              Creating your future identity...
+            </div>
+            
+            <!-- Result container -->
+            <div id="result" class="result-card glass"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chat Mode Section -->
+    <section id="chat">
+      <div class="container">
+        <div class="section-title reveal">
+          <h2>Ask your future self anything.</h2>
+          <p>The conversation changes when the advisor is the person you are becoming.</p>
+        </div>
+        <div class="chat-shell glass reveal">
+          <div class="chat" id="chatContainer">
+            <!-- Starting placeholder messages -->
+            <div class="bubble user">
+              Will I actually make it?
+            </div>
+            <div class="bubble ai">
+              Only if your daily actions stop negotiating with your dreams.
+            </div>
+            <div class="bubble user">
+              What should I focus on this week?
+            </div>
+            <div class="bubble ai">
+              Remove distractions. Build one visible proof of progress. Then show it to the world.
+            </div>
+          </div>
+          <!-- Chat form input -->
+          <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Ask your future self..." disabled>
+            <button class="btn btn-primary" id="sendChatBtn" disabled>Send</button>
+          </div>
+          <div id="chatError" class="error" style="margin-top:10px;"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Prompt Hacking section -->
+    <section id="hack">
+      <div class="container">
+        <div class="hack-panel reveal">
+          <div class="section-title">
+            <h2>Founder Lab AI Hack</h2>
+            <p>Advanced prompting techniques that instantly improve AI outcomes.</p>
+          </div>
+          <div class="hack-list">
+            <div class="hack-item">
+              <strong>Identity Prompting</strong>
+              Don’t ask AI what to do. Ask it to respond as the future version of you who already solved the problem.
+            </div>
+            <div class="hack-item">
+              <strong>Constraint Prompting</strong>
+              Add limits like time, budget, energy, and skill level to get practical answers.
+            </div>
+            <div class="hack-item">
+              <strong>Reverse Fear Prompting</strong>
+              Ask AI what mistake your future self would warn you about today.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to action share section -->
+    <section>
+      <div class="container final reveal">
+        <h2>You did not just build a page. You built a mirror.</h2>
+        <p>FutureMe turns AI from a tool into a personal growth experience.</p>
+        <button class="btn btn-primary" id="shareBtn">Share My FutureMe</button>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== VIEW 2: AUTHENTICATION PANEL ==================== -->
+  <div id="authView" class="view-panel container">
+    <section>
+      <div class="auth-panel glass">
+        <h2 id="authTitle">Create Your Account</h2>
+        <p id="authSubtitle">Join FutureMe to save reflections and unlock chat memory.</p>
+        
+        <form class="auth-form" id="authForm">
+          <div class="form-group" id="authNameGroup">
+            <label for="authName">Full Name</label>
+            <input type="text" id="authName" placeholder="Your name">
+          </div>
+          <div class="form-group">
+            <label for="authEmail">Email Address</label>
+            <input type="email" id="authEmail" placeholder="you@example.com" required>
+          </div>
+          <div class="form-group">
+            <label for="authPassword">Password</label>
+            <input type="password" id="authPassword" placeholder="••••••••" required>
+          </div>
+          <button type="submit" class="btn btn-primary" id="authSubmitBtn" style="margin-top: 15px;">Sign Up</button>
+          <div id="authError" class="error"></div>
+        </form>
+
+        <button class="btn google-btn" id="googleAuthBtn">
+          <!-- Google SVG icon -->
+          <svg width="18" height="18" viewBox="0 0 18 18"><path d="M17.64 9.2c0-.63-.06-1.25-.16-1.84H9v3.47h4.84c-.21 1.12-.84 2.07-1.79 2.7v2.25h2.9c1.69-1.55 2.69-3.85 2.69-6.58z" fill="#4285F4"/><path d="M9 18c2.43 0 4.47-.8 5.96-2.2l-2.9-2.25c-.8.54-1.83.86-3.06.86-2.35 0-4.34-1.58-5.05-3.71H.92v2.33C2.4 16.03 5.48 18 9 18z" fill="#34A853"/><path d="M3.95 10.7c-.18-.54-.28-1.12-.28-1.7s.1-1.16.28-1.7V4.97H.92C.33 6.18 0 7.55 0 9s.33 2.82.92 4.03l3.03-2.33z" fill="#FBBC05"/><path d="M9 3.58c1.32 0 2.5.45 3.44 1.35L15 2.2C13.46.79 11.43 0 9 0 5.48 0 2.4 1.97.92 4.97l3.03 2.33c.71-2.13 2.7-3.71 5.05-3.71z" fill="#EA4335"/></svg>
+          Continue with Google
+        </button>
+        
+        <div class="auth-switch">
+          <span id="authSwitchLink">Already have an account? Log In</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== VIEW 3: REFLECTION DASHBOARD ==================== -->
+  <div id="dashboardView" class="view-panel container">
+    <section>
+      <div class="section-title">
+        <h2>Your AI Reflection Dashboard</h2>
+        <p>Track your goals, habits, and timeline evolution over time.</p>
+      </div>
+
+      <div class="dashboard-stats">
+        <div class="stat-box glass">
+          <h3>Total Generations</h3>
+          <div class="stat-val" id="statGenerations">0</div>
+        </div>
+        <div class="stat-box glass">
+          <h3>Chat Messages</h3>
+          <div class="stat-val" id="statChats">0</div>
+        </div>
+        <div class="stat-box glass">
+          <h3>Subscription Tier</h3>
+          <div class="stat-val" id="statTier">Free</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Growth Timeline -->
+        <div class="glass" style="padding: 30px; border-radius: 24px;">
+          <h3 style="margin-bottom: 20px;">Growth Timeline</h3>
+          <div class="growth-timeline-list" id="dashboardTimeline">
+            <p style="color: var(--muted);">No generations recorded. Go to "Create" to build your first FutureMe.</p>
+          </div>
+        </div>
+
+        <!-- Long-Term Memory Profile -->
+        <div class="memory-box glass">
+          <h3>Long-Term memory</h3>
+          <p style="color: var(--muted); margin-bottom: 15px; font-size: 0.9rem;">
+            Insights distilled from your entries. FutureMe reads this memory to connect different sessions.
+          </p>
+          
+          <h4 style="margin-bottom: 8px; font-size: 1rem; color: var(--accent);">Active Goals</h4>
+          <div class="memory-tag-list" id="memoryGoals">
+            <span style="color: var(--muted); font-size: 0.9rem;">Waiting for insights...</span>
+          </div>
+
+          <h4 style="margin-bottom: 8px; font-size: 1rem; color: var(--accent2);">Obstacles & Fears</h4>
+          <div class="memory-tag-list" id="memoryFears">
+            <span style="color: var(--muted); font-size: 0.9rem;">Waiting for insights...</span>
+          </div>
+
+          <h4 style="margin-bottom: 8px; font-size: 1rem; color: var(--success);">Daily Habits</h4>
+          <div class="memory-tag-list" id="memoryHabits">
+            <span style="color: var(--muted); font-size: 0.9rem;">Waiting for insights...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== VIEW 4: WEEKLY LETTERS VIEW ==================== -->
+  <div id="lettersView" class="view-panel container">
+    <section>
+      <div class="section-title">
+        <h2>Weekly Future Letters</h2>
+        <p>Receive wisdom in your inbox. Download PDFs to review offline.</p>
+        <button class="btn btn-primary" id="generateLetterBtn" style="margin-top:20px;">Trigger New Weekly Letter</button>
+        <div id="letterTriggerMsg" style="margin-top:10px;" class="status"></div>
+      </div>
+
+      <div class="letter-section">
+        <!-- List of letters -->
+        <div class="glass" style="padding: 24px; border-radius: 20px; height: fit-content;">
+          <h3 style="margin-bottom: 15px;">Letter History</h3>
+          <div class="letter-list" id="lettersList">
+            <p style="color: var(--muted);">No letters generated yet.</p>
+          </div>
+        </div>
+
+        <!-- Letter content reader -->
+        <div class="letter-detail glass" id="letterDetailPanel">
+          <div style="text-align: center; margin: auto; color: var(--muted);" id="letterReaderPlaceholder">
+            Select a letter from the list to read or download.
+          </div>
+          <div id="letterReaderContent" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.08); padding-bottom: 15px;">
+              <div>
+                <h3 id="letterSubject" style="color: var(--accent); font-size: 1.4rem;"></h3>
+                <span id="letterDate" style="color: var(--muted); font-size: 0.9rem;"></span>
+              </div>
+              <div>
+                <a id="letterPdfLink" href="" target="_blank"><button class="btn btn-secondary btn-sm" style="padding: 8px 16px; font-size: 0.9rem;">Download PDF</button></a>
+              </div>
+            </div>
+            <div class="letter-body" id="letterTextBody"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== VIEW 5: UPGRADE / BILLING VIEW ==================== -->
+  <div id="billingView" class="view-panel container">
+    <section>
+      <div class="section-title">
+        <h2>Choose Your Growth Path</h2>
+        <p>Unlock deep introspection and infinite conversation with your future identity.</p>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Free tier card -->
+        <div class="price-card glass">
+          <h3>Self-Reflection Free</h3>
+          <div class="price">$0<span>/forever</span></div>
+          <ul class="features-list free-features">
+            <li>3 FutureMe identity generations</li>
+            <li>20 total chat messages</li>
+            <li>Calm Mentor tone access</li>
+            <li>Core safety filters</li>
+          </ul>
+          <button class="btn btn-secondary" style="width: 100%;" disabled>Current Tier</button>
+        </div>
+
+        <!-- Premium tier card -->
+        <div class="price-card glass premium">
+          <h3>FutureMe Premium</h3>
+          <div class="price">$9<span>/month</span></div>
+          <ul class="features-list">
+            <li>Unlimited identity generations</li>
+            <li>Unlimited chat conversations</li>
+            <li>Full dashboard and growth timeline</li>
+            <li>Weekly personalized letters (email + PDF)</li>
+            <li>All tones (Brutal, CEO, Mentor, Motivational)</li>
+          </ul>
+          <button class="btn btn-primary" id="upgradeBtn" style="width: 100%;">Upgrade to Premium</button>
+          <div id="billingError" class="error" style="margin-top:10px;"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- ==================== VIEW 6: ADMINISTRATIVE PANEL ==================== -->
+  <div id="adminView" class="view-panel container">
+    <section>
+      <div class="section-title">
+        <h2>Admin Operations Panel</h2>
+        <p>Review system stats, usage spikes, and popular customer goals.</p>
+      </div>
+
+      <div class="dashboard-stats" style="margin-bottom: 40px;">
+        <div class="stat-box glass">
+          <h3>Total System Users</h3>
+          <div class="stat-val" id="adminUsers">0</div>
+        </div>
+        <div class="stat-box glass">
+          <h3>Total Generations</h3>
+          <div class="stat-val" id="adminGenerations">0</div>
+        </div>
+        <div class="stat-box glass">
+          <h3>Active Subscribers</h3>
+          <div class="stat-val" id="adminSubscribers">0</div>
+        </div>
+      </div>
+
+      <div class="dashboard-grid">
+        <!-- Goals tracker -->
+        <div class="glass" style="padding:30px; border-radius:24px;">
+          <h3>Top Customer Dreams & Goals</h3>
+          <ul class="features-list" id="adminGoalsList" style="margin-top:20px; list-style:disc; padding-left:20px;">
+            <!-- goals injected here -->
+          </ul>
+        </div>
+
+        <!-- System log events -->
+        <div class="glass" style="padding:30px; border-radius:24px;">
+          <h3>Recent System Activity Events</h3>
+          <div class="growth-timeline-list" id="adminEventsList" style="margin-top:20px; font-size:0.9rem;">
+            <!-- events injected here -->
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      Vaishnavi • FutureMe Live Build
+    </div>
+  </footer>
+
+  <!-- Notification Toast -->
+  <div class="toast" id="toast">
+    Your FutureMe moment is ready to share.
+  </div>
+
+  <!-- Frontend Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
