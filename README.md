@@ -1,114 +1,53 @@
-# FutureMe — AI-Powered Self-Reflection Platform
+# FutureMe AI
 
-FutureMe is a premium, AI-native self-reflection platform designed to help users connect with and receive guidance from the future version of themselves who has already achieved their life and career goals. Built with an elegant Apple-style design and glassmorphism styling, this project converts a static landing page into a fully functional SaaS application.
+FutureMe AI is a personal growth web application that helps users imagine and interact with a future version of themselves.
 
-> "Talk to the version of you who already made it."
+The idea behind this project is simple: instead of asking AI for general advice, users receive guidance from the person they want to become. By understanding their current situation, goals, and challenges, FutureMe generates personalized messages and practical action steps that encourage consistent progress.
 
----
+## Features
 
-## ✨ Features
+- Create your own FutureMe profile
+- Get a personalized message from your future self
+- View your future identity and growth plan
+- Receive three practical next steps
+- Daily habit recommendation
+- Premium and responsive user interface
+- Smooth animations and modern glassmorphism design
 
-### 1. 🔐 User Authentication (Supabase Auth)
-- Secure signup and login via **Email/Password** and **Google Social OAuth**.
-- Automated creation of matching profiles in a secure users table.
-- JWT-based authentication middleware validating sessions across all API requests.
+## Built With
 
-### 2. 🧠 Gemini AI Prompt Engineering Layer (Gemini 2.5 Flash)
-- **Persona Tones**: Motivational, Brutally Honest, Calm Mentor, and CEO Mode.
-- Dynamic prompt injection incorporating the user's name, age, goals, struggles, and long-term memory.
-- Outputs structured JSON content containing personalized letters, next steps, and daily habits.
+- HTML5
+- CSS3
+- JavaScript
 
-### 3. 💾 Long-Term Memory Profile
-- Extracts and updates user objectives, obstacles, and habits from previous sessions using Gemini.
-- Stores historical insights in a database to create a continuous, connected conversational experience across sessions.
+## Why I Built This
 
-### 4. 💬 Real-Time Identity Chat
-- Full-featured chat workspace allowing users to converse directly with their generated future identity.
-- Restores chat history dynamically from database stores.
+I wanted to explore how AI can be used for self-improvement instead of just answering questions. FutureMe is my attempt to create an experience where AI feels more personal and helps users reflect on their goals, overcome challenges, and stay focused on long-term growth.
 
-### 5. 📊 Reflection Dashboard
-- **Growth Timeline**: Visual log of past generated future selves.
-- **Distilled Memory Tags**: Active goals, fears, and habits tracked dynamically.
-- Interactive statistics counting total generations and messages.
+## Future Improvements
 
-### 6. ✉️ Weekly Letters & PDF Exports (Resend + PDFKit)
-- Scheduled or manual trigger to generate a reflective weekly update letter summarizing recent goals and chats.
-- Automatic email dispatch using the **Resend API**.
-- Offline letter download as a styled PDF generated dynamically with **PDFKit**.
+- Connect with OpenAI or Gemini API
+- Save conversation history
+- AI voice interaction
+- User login and profiles
+- Progress tracking dashboard
+- Weekly AI-generated reflections
 
-### 7. 💳 Stripe Subscription Billing
-- Tiered subscription setup:
-  - **Free Tier**: Limited to 3 generations and 20 chat messages.
-  - **Premium Tier ($9/mo)**: Unlimited generations, unlimited chats, reflection dashboards, and weekly letters.
-- Syncs subscription state using Stripe Checkout sessions and secure webhook signing.
+## Project Structure
 
-### 8. 🛡️ Safety & Moderation Layer
-- Pre-scans user prompts on the server side to block dangerous activities, self-harm, legal, or medical advice requests before passing to Gemini.
-
----
-
-## 🛠️ Tech Stack
-
-- **Frontend**: Single Page Application (SPA) in Vanilla HTML5, CSS3 (variables, transitions, animations), and JavaScript (async API calls, view router).
-- **Backend**: Node.js, Express.js.
-- **Database**: Supabase (PostgreSQL) with Row-Level Security (RLS) tables.
-- **AI Integration**: Gemini SDK (`@google/genai`).
-- **Integrations**: Stripe SDK (Billing), Resend SDK (Emails), PostHog (Analytics).
-- **PDF Generation**: PDFKit.
-
----
-
-## 📁 Repository Structure
-
-```txt
-futureme/
-├── frontend/
-│   ├── index.html          # Unified premium frontend view panels
-│   ├── app.js              # SPA router, API requests, session management
-│   └── styles.css          # Styling variables, glassy layouts, and modals
-├── backend/
-│   ├── server.js           # Express main entrypoint
-│   ├── controllers/        # Route controllers (Auth, FutureMe, Dashboard, Billing, Letters)
-│   ├── middleware/         # Middlewares (Auth, Safety Moderation, Subscription checks)
-│   ├── routes/             # Express API routers
-│   ├── services/           # Third-party wrappers (Gemini, Stripe, Resend, PostHog, Memory)
-│   └── utils/              # DB clients (Supabase & local mockup DB client)
-├── database/
-│   └── schema.sql          # PostgreSQL table schemas, policies, and triggers
-├── .env.template           # Template for environment variables
-├── vercel.json             # Vercel Serverless routing deployment config
-└── package.json            # Node.js dependencies
+```
+futureme-ai/
+│
+├── index.html
+├── css/
+│   └── style.css
+├── js/
+│   └── script.js
+├── README.md
 ```
 
----
+## Author
 
-## 🚀 Getting Started
+**Vaishnavi**
 
-### Prerequisites
-- Node.js (v18 or higher) installed.
-- Supabase account (optional, fallback Mock DB included).
-
-### Installation
-1. Clone this repository to your local machine.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Copy the environment variables template and configure it:
-   ```bash
-   copy .env.template .env
-   ```
-   *(If you leave keys empty, the system automatically enters **Mock Mode** for database, email, Stripe, and analytics so you can test all features offline!)*
-
-### Running the App
-Start the local development server:
-```bash
-npm run dev
-```
-Open **`http://localhost:5000`** in your browser.
-
-### Running Integration Tests
-Execute the automated test suite verifying all server endpoints:
-```bash
-node backend/test_api.js
-```
+This project was built as part of my learning journey in frontend development and AI-based product design.
